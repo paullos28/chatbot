@@ -1,2 +1,2 @@
-# chatbot
-Chatbot para verificar disponibilidade dos sistemas
+# chatbot MDA
+Chatbot para conversa com o público alvo do MDA
