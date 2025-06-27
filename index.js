@@ -55,12 +55,12 @@ const verifyOdaSignature = (req, res, next) => {
   hmac.update(rawBodyBuffer);
   const calculatedSignature = 'sha256=' + hmac.digest('hex');
 
-  /*if (odaSignature !== calculatedSignature) {
+  if (odaSignature !== calculatedSignature) {
     console.log('OdaSignature: %s', odaSignature)
     console.log('CalculatedSignature: %s', calculatedSignature)
     console.error('Falha na validação da assinatura do ODA. Requisição não autorizada.');
     return res.status(401).send('Unauthorized: Invalid signature.');
-  }*/
+  }
 
   // Assinatura válida, prossegue para o handler da rota.
   next();
@@ -95,13 +95,16 @@ app.post('/webhook', verifyOdaSignature, async (req, res) => {
   // A presença da assinatura do ODA (já validada no middleware) é a forma
   // mais segura de saber que a mensagem vem do assistente digital.
   const isFromODA = !!req.get('X-Hub-Signature-256');
+  console.log('Verificando se a mensagem veio do ODA...')
+  console.log(isFromODA)
 
   if (isFromODA) {
     // --- LÓGICA: MENSAGEM VINDA DO ODA PARA O USUÁRIO ---
     console.log('Recebida mensagem do ODA:', JSON.stringify(body, null, 2));
     
     const userId = body.userId; // Número de telefone do usuário
-    const messages = body.entry[0].changes[0].value.messages;
+    //const messages = body.entry[0].changes[0].value.messages;
+    const messages = body.messagePayload.body.messages;
 
     // ODA pode enviar múltiplas "bolhas" de mensagem de uma vez.
     for (const message of messages) {
