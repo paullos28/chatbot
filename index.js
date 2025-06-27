@@ -101,7 +101,7 @@ app.post('/webhook', verifyOdaSignature, async (req, res) => {
     console.log('Recebida mensagem do ODA:', JSON.stringify(body, null, 2));
     
     const userId = body.userId; // Número de telefone do usuário
-    const messages = body.messagePayload.entry[0].changes[0].value.messages[0].text.body;
+    const messages = body.entry[0].changes[0].value.messages[0].text.body;
 
     // ODA pode enviar múltiplas "bolhas" de mensagem de uma vez.
     for (const message of messages) {
