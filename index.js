@@ -165,7 +165,8 @@ app.post('/webhook', async (req, res) => {
             text: text
           }
         };
-        console.log('OdaPayload:', odaPayload)
+        console.log('OdaPayload:', odaPayload);
+        console.log('X-Hub-Signature-256: sha256=', crypto.createHmac('sha256', ODA_SECRET_KEY).update(JSON.stringify(odaPayload)).digest('hex'));
         
         try {
           await axios.post(ODA_WEBHOOK_URL, odaPayload, {
