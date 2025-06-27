@@ -176,4 +176,8 @@ app.listen(PORT, () => {
   console.log(`- VERIFY_TOKEN: ${VERIFY_TOKEN ? 'OK' : 'FALTA'}`);
 });
 
+// ---- VERIFICAR SE O WEBHOOK ESTÁ FUNCIONANDO ----
+app.get("/", (req, res) => {
+    res.status(200).send("Webhook funcionando!");
+});
 
