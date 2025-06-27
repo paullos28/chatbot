@@ -37,7 +37,7 @@ const VERIFY_TOKEN = process.env.VERIFY_TOKEN; // Seu token de verificação par
 // --- MIDDLEWARE DE VERIFICAÇÃO DE ASSINATURA DO ODA ---
 // Este middleware protege o endpoint contra requisições que não venham do ODA.
 const verifyOdaSignature = (req, res, next) => {
-  const odaSignature = req.get('X-Hub-Signature-256');
+  const odaSignature = req.headers('X-Hub-Signature-256');
 
   // Se a assinatura não estiver presente, significa que a requisição
   // provavelmente veio do WhatsApp, então pulamos a verificação.
