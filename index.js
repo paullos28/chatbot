@@ -37,7 +37,7 @@ const VERIFY_TOKEN = process.env.VERIFY_TOKEN; // Seu token de verificação par
 // --- MIDDLEWARE DE VERIFICAÇÃO DE ASSINATURA DO ODA ---
 // Este middleware protege o endpoint contra requisições que não venham do ODA.
 const verifyOdaSignature = (req, res, next) => {
-  const odaSignature = req.headers('X-Hub-Signature-256');
+  const odaSignature = req.get('X-Hub-Signature-256');
 
   // Se a assinatura não estiver presente, significa que a requisição
   // provavelmente veio do WhatsApp, então pulamos a verificação.
@@ -96,8 +96,8 @@ app.post('/webhook', async (req, res) => {
   // VERIFICA A ORIGEM DA MENSAGEM (ODA ou WhatsApp)
   // A presença da assinatura do ODA (já validada no middleware) é a forma
   // mais segura de saber que a mensagem vem do assistente digital.
-  const isFromODA = !!req.get('X-Hub-Signature-256');
-  console.log('Verificando a signature do HTTP...', req.get('X-Hub-Signature-256'))
+  const isFromODA = !!req.headers('X-Hub-Signature-256');
+  console.log('Verificando a signature do HTTP...', req.headers('X-Hub-Signature-256'))
   console.log('Verificando se a mensagem veio do ODA...')
   console.log(isFromODA)
 
