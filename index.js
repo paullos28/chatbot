@@ -92,10 +92,7 @@ app.get('/webhook', (req, res) => {
 //app.post('/webhook', verifyOdaSignature, async (req, res) => {
 app.post('/webhook', async (req, res) => {
   const body = req.body;
-  console.log ('Body da mensagem post:', body)
-
-  const header = req.header
-  console.log ('Header da mensagem post:', header)
+  console.log ('Request:', req)
 
   // VERIFICA A ORIGEM DA MENSAGEM (ODA ou WhatsApp)
   // A presença da assinatura do ODA (já validada no middleware) é a forma
