@@ -52,6 +52,7 @@ const verifyOdaSignature = (req, res, next) => {
   }
 
   const hmac = crypto.createHmac('sha256', ODA_SECRET_KEY);
+  console.log('SecretKey: ', ODA_SECRET_KEY)
   hmac.update(rawBodyBuffer);
   const calculatedSignature = 'sha256=' + hmac.digest('hex');
 
