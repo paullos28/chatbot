@@ -56,8 +56,8 @@ const verifyOdaSignature = (req, res, next) => {
   const calculatedSignature = 'sha256=' + hmac.digest('hex');
 
   if (odaSignature !== calculatedSignature) {
-    console.print(odaSignature)
-    console.print(calculatedSignature)
+    console.log('OdaSignature: %s', odaSignature)
+    console.log('CalculatedSignature: %s', calculatedSignature)
     console.error('Falha na validação da assinatura do ODA. Requisição não autorizada.');
     return res.status(401).send('Unauthorized: Invalid signature.');
   }
