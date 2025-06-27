@@ -89,13 +89,15 @@ app.get('/webhook', (req, res) => {
 
 // Rota POST: Recebe notificações tanto do WhatsApp quanto do ODA.
 // O middleware `verifyOdaSignature` é aplicado aqui.
-app.post('/webhook', verifyOdaSignature, async (req, res) => {
+//app.post('/webhook', verifyOdaSignature, async (req, res) => {
+app.post('/webhook', async (req, res) => {
   const body = req.body;
 
   // VERIFICA A ORIGEM DA MENSAGEM (ODA ou WhatsApp)
   // A presença da assinatura do ODA (já validada no middleware) é a forma
   // mais segura de saber que a mensagem vem do assistente digital.
   const isFromODA = !!req.get('X-Hub-Signature-256');
+  console.log('Verificando a signature do HTTP...', req.get('X-Hub-Signature-256'))
   console.log('Verificando se a mensagem veio do ODA...')
   console.log(isFromODA)
 
