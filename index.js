@@ -189,6 +189,7 @@ app.listen(PORT, () => {
   console.log(`- ODA_SECRET_KEY: ${ODA_SECRET_KEY ? 'OK' : 'FALTA'}`);
   console.log(`- WHATSAPP_API_TOKEN: ${WHATSAPP_API_TOKEN ? 'OK' : 'FALTA'}`);
   console.log(`- WHATSAPP_PHONE_NUMBER_ID: ${WHATSAPP_PHONE_NUMBER_ID ? 'OK' : 'FALTA'}`);
+  console.log(`- WHATSAPP_APP_SECRET_KEY: ${WHATSAPP_APP_SECRET_KEY ? 'OK' : 'FALTA'}`);
   console.log(`- VERIFY_TOKEN: ${VERIFY_TOKEN ? 'OK' : 'FALTA'}`);
 });
 
