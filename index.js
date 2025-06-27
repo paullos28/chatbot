@@ -163,14 +163,18 @@ app.post('/webhook', async (req, res) => {
             text: text
           }
         };
-
-        try {
+        console.log('OdaPayload:', odaPayload)
+        
+        /*try {
           await axios.post(ODA_WEBHOOK_URL, odaPayload, {
             headers: {
               'Content-Type': 'application/json',
               'X-Hub-Signature': 'sha1=' + crypto.createHmac('sha1', ODA_SECRET_KEY).update(JSON.stringify(odaPayload)).digest('hex') // ODA também espera uma assinatura, mas geralmente valida pela X-Hub-Signature-256 que é mais segura. A documentação deve ser consultada para o formato exato.
             }
-          });
+          }); */
+        
+        try {
+          await axios.post(ODA_WEBHOOK_URL, odaPayload);
           console.log(`Mensagem encaminhada para o ODA para o usuário ${from}`);
         } catch (error) {
           console.error('Erro ao enviar mensagem para o ODA:', error.response ? error.response.data : error.message);
