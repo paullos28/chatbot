@@ -113,7 +113,7 @@ app.post('/webhook', verifyOdaSignature, async (req, res) => {
 
         try {
           await axios.post(
-            `https://graph.facebook.com/v19.0/${WHATSAPP_PHONE_NUMBER_ID}/messages`,
+            `https://graph.facebook.com/v23.0/${WHATSAPP_PHONE_NUMBER_ID}/messages`,
             messageData,
             { headers: { 'Authorization': `Bearer ${WHATSAPP_API_TOKEN}` } }
           );
