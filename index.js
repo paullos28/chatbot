@@ -32,6 +32,7 @@ const ODA_WEBHOOK_URL = process.env.ODA_WEBHOOK_URL;
 const ODA_SECRET_KEY = process.env.ODA_SECRET_KEY;
 const WHATSAPP_API_TOKEN = process.env.WHATSAPP_API_TOKEN;
 const WHATSAPP_PHONE_NUMBER_ID = process.env.WHATSAPP_PHONE_NUMBER_ID;
+const WHATSAPP_APP_SECRET_KEY = process.env.WHATSAPP_APP_SECRET_KEY
 const VERIFY_TOKEN = process.env.VERIFY_TOKEN; // Seu token de verificação para a Meta
 
 // --- MIDDLEWARE DE VERIFICAÇÃO DE ASSINATURA DO ODA ---
@@ -92,8 +93,14 @@ app.get('/webhook', (req, res) => {
 //app.post('/webhook', verifyOdaSignature, async (req, res) => {
 app.post('/webhook', async (req, res) => {
   const body = req.body;
-  console.log ('Request:', req)
+  //console.log ('Request:', req)
 
+  const hmac = crypto.createHmac('sha256', WHATSAPP_APP_SECRET_KEY);
+  hmac.update(rawBodyBuffer);
+  const calculatedSignature = 'sha256=' + hmac.digest('hex');
+  console.log('Calculated Signature: ', calculatedSignature)
+  console.log('Signature POST Request:', req.get('X-Hub-Signature-256'))
+  
   // VERIFICA A ORIGEM DA MENSAGEM (ODA ou WhatsApp)
   // A presença da assinatura do ODA (já validada no middleware) é a forma
   // mais segura de saber que a mensagem vem do assistente digital.
