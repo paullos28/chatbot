@@ -153,11 +153,13 @@ app.post('/webhook', async (req, res) => {
       if (messageInfo.type === 'text') {
         const from = messageInfo.from; // Número do remetente
         const text = messageInfo.text.body;
-
+        const userName = body.entry[0].changes[0].value.contacts[0].profile.name;
+        const lastName = body_param.entry[0].changes[0].value.messages[0].from;
         console.log(`Recebida mensagem do WhatsApp de ${from}: "${text}"`);
 
         const odaPayload = {
           userId: from,
+          profile: {firstName: userName, lastName:lastName},
           messagePayload: {
             type: 'text',
             text: text
