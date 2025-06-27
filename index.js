@@ -154,12 +154,12 @@ app.post('/webhook', async (req, res) => {
         const from = messageInfo.from; // Número do remetente
         const text = messageInfo.text.body;
         const userName = body.entry[0].changes[0].value.contacts[0].profile.name;
-        const lastName = body.entry[0].changes[0].value.messages[0].from;
+
         console.log(`Recebida mensagem do WhatsApp de ${from}: "${text}"`);
 
         const odaPayload = {
           userId: from,
-          profile: {firstName: userName, lastName:lastName},
+          //profile: {firstName: userName, lastName:from},
           messagePayload: {
             type: 'text',
             text: text
@@ -167,16 +167,13 @@ app.post('/webhook', async (req, res) => {
         };
         console.log('OdaPayload:', odaPayload)
         
-        /*try {
+        try {
           await axios.post(ODA_WEBHOOK_URL, odaPayload, {
             headers: {
               'Content-Type': 'application/json',
-              'X-Hub-Signature': 'sha1=' + crypto.createHmac('sha1', ODA_SECRET_KEY).update(JSON.stringify(odaPayload)).digest('hex') // ODA também espera uma assinatura, mas geralmente valida pela X-Hub-Signature-256 que é mais segura. A documentação deve ser consultada para o formato exato.
+              'X-Hub-Signature-256': 'sha256=' + crypto.createHmac('sha256', ODA_SECRET_KEY).update(JSON.stringify(odaPayload)).digest('hex') // ODA também espera uma assinatura, mas geralmente valida pela X-Hub-Signature-256 que é mais segura. A documentação deve ser consultada para o formato exato.
             }
-          }); */
-        
-        try {
-          await axios.post(ODA_WEBHOOK_URL, odaPayload);
+          });
           console.log(`Mensagem encaminhada para o ODA para o usuário ${from}`);
         } catch (error) {
           console.error('Erro ao enviar mensagem para o ODA:', error.response ? error.response.data : error.message);
