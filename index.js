@@ -95,21 +95,23 @@ app.post('/webhook', async (req, res) => {
   const body = req.body;
   //console.log ('Request:', req)
 
+  // VERIFICA A ORIGEM DA MENSAGEM (ODA ou WhatsApp)
+  // CRIA UMA CONSTANTES: isFromWhatsapp
+  // VALORANDO A CONSTANTE isFromWhatsapp
   const hmac = crypto.createHmac('sha256', WHATSAPP_APP_SECRET_KEY);
   hmac.update(rawBodyBuffer);
-  const calculatedSignature = 'sha256=' + hmac.digest('hex');
-  console.log('Calculated Signature: ', calculatedSignature)
-  console.log('Signature POST Request:', req.get('X-Hub-Signature-256'))
-  
-  // VERIFICA A ORIGEM DA MENSAGEM (ODA ou WhatsApp)
+  const key_wz = 'sha256=' + hmac.digest('hex');
+  const key_post = req.get('X-Hub-Signature-256')
+  const isFromWhatsapp = key_wz === key_post
+
   // A presença da assinatura do ODA (já validada no middleware) é a forma
   // mais segura de saber que a mensagem vem do assistente digital.
-  const isFromODA = !!req.get('X-Hub-Signature-256');
-  console.log('Verificando a signature do HTTP...', req.get('X-Hub-Signature-256'))
-  console.log('Verificando se a mensagem veio do ODA...')
-  console.log(isFromODA)
+  //const isFromODA = !!req.get('X-Hub-Signature-256');
+  //console.log('Verificando a signature do HTTP...', req.get('X-Hub-Signature-256'))
+  //console.log('Verificando se a mensagem veio do ODA...')
+  //console.log(isFromODA)
 
-  if (isFromODA) {
+  if (!isFromWhatsapp) {
     // --- LÓGICA: MENSAGEM VINDA DO ODA PARA O USUÁRIO ---
     console.log('Recebida mensagem do ODA:', JSON.stringify(body, null, 2));
     
@@ -141,7 +143,7 @@ app.post('/webhook', async (req, res) => {
       // TODO: Adicionar lógica para outros tipos de mensagem (imagens, botões, etc.)
     }
 
-  } else if (body.object === 'whatsapp_business_account') {
+  } else if (isFromWhatsapp) {
     // --- LÓGICA: MENSAGEM VINDA DO WHATSAPP PARA O ODA ---
     // Verifica se é uma notificação de mensagem
     if (body.entry && body.entry[0].changes && body.entry[0].changes[0].value.messages) {
