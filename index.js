@@ -116,32 +116,30 @@ app.post('/webhook', async (req, res) => {
     console.log('Recebida mensagem do ODA:', JSON.stringify(body, null, 2));
     
     const userId = body.userId; // Número de telefone do usuário
-    //const messages = body.entry[0].changes[0].value.messages;
-    const messages = body.messagePayload;
+    const message = body.messagePayload;
 
     // ODA pode enviar múltiplas "bolhas" de mensagem de uma vez.
-    for (const message of messages) {
-      if (message.type === 'text') {
-        const messageData = {
-          messaging_product: 'whatsapp',
-          to: userId,
-          type: 'text',
-          text: { body: message.text }
-        };
+    
+    if (message.type === 'text') {
+      const messageData = {
+        messaging_product: 'whatsapp',
+        to: userId,
+        type: 'text',
+        text: { body: message.text }
+      };
 
-        try {
-          await axios.post(
-            `https://graph.facebook.com/v23.0/${WHATSAPP_PHONE_NUMBER_ID}/messages`,
-            messageData,
-            { headers: { 'Authorization': `Bearer ${WHATSAPP_API_TOKEN}` } }
-          );
-          console.log(`Mensagem enviada para o WhatsApp do usuário ${userId}`);
-        } catch (error) {
-          console.error('Erro ao enviar mensagem para o WhatsApp:', error.response ? error.response.data : error.message);
-        }
+      try {
+        await axios.post(
+          `https://graph.facebook.com/v23.0/${WHATSAPP_PHONE_NUMBER_ID}/messages`,
+          messageData,
+          { headers: { 'Authorization': `Bearer ${WHATSAPP_API_TOKEN}` } }
+        );
+        console.log(`Mensagem enviada para o WhatsApp do usuário ${userId}`);
+      } catch (error) {
+        console.error('Erro ao enviar mensagem para o WhatsApp:', error.response ? error.response.data : error.message);
       }
-      // TODO: Adicionar lógica para outros tipos de mensagem (imagens, botões, etc.)
     }
+    // TODO: Adicionar lógica para outros tipos de mensagem (imagens, botões, etc.)
 
   } else if (isFromWhatsapp) {
     // --- LÓGICA: MENSAGEM VINDA DO WHATSAPP PARA O ODA ---
