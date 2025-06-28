@@ -117,7 +117,7 @@ app.post('/webhook', async (req, res) => {
     
     const userId = body.userId; // Número de telefone do usuário
     //const messages = body.entry[0].changes[0].value.messages;
-    const messages = body.messagePayload.body.messages;
+    const messages = body.messagePayload;
 
     // ODA pode enviar múltiplas "bolhas" de mensagem de uma vez.
     for (const message of messages) {
